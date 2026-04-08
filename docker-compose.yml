@@ -1,0 +1,42 @@
+version: "3.11"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile   # TODO: create Dockerfile
+    image: compliance-agent:latest
+    container_name: compliance-agent-api
+    env_file: .env
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - chroma
+    restart: unless-stopped
+    # TODO: healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+    #   interval: 30s
+    #   timeout: 5s
+    #   retries: 3
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    container_name: compliance-agent-chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    restart: unless-stopped
+
+  # TODO: add a Jupyter service for notebook experiments
+  # jupyter:
+  #   image: jupyter/scipy-notebook:latest
+  #   ports:
+  #     - "8888:8888"
+  #   volumes:
+  #     - .:/home/jovyan/work
+
+volumes:
+  chroma_data:
