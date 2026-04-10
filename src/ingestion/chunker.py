@@ -45,10 +45,14 @@ class PolicyChunker:
         
 
     def _add_chunk_metadata(self, chunks: list) -> list:
-        """Attach chunk index and parent document ID to each chunk's metadata."""
         filtered = []
         for i, chunk in enumerate(chunks):
-            if len(chunk.page_content.strip()) < 100:  # drop noise chunks, assuming mostly these are from headers/footers or boilerplate or titles
+            content = chunk.page_content.strip()
+            if len(content) < 100:
+                continue
+            if chunk.metadata.get("page") == 0:
+                continue
+            if content.count('. . .') > 2 or content.count('......') > 1:
                 continue
             chunk.metadata["chunk_index"] = i
             filtered.append(chunk)

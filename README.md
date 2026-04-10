@@ -113,3 +113,78 @@ compliance context where incomplete rules can produce harmful answers.
 **Noise filtering:**
 Chunks under 100 characters are dropped at index time. Cover pages, table of contents 
 entries, and section headers were being indexed and polluting retrieval results.
+
+
+## Known limitations
+
+- TOC detection uses dot-pattern heuristics — may miss TOCs without 
+  dot leaders. Future fix: section-aware splitting with Docling.
+- Critic score is a single float — does not distinguish between 
+  faithfulness and completeness failures separately.
+- Conflict node not yet implemented — queries classified as `conflict` 
+  will not return meaningful answers.
+- No persistent conversation memory across sessions.
+
+**Experiment tracking:** Used MLflow to log all chunking experiments. 
+Three strategies compared across 96 pages of OPM compliance documents.
+Results available in MLflow UI. Final selection: recursive_1024_128 
+based on chunk coherence and policy clause completeness.
+![alt text](image.png)
+
+**Agent State**:
+query          → what the user asked. Set at the start, never changes.
+routed_to      → router writes this. "retriever", "conflict", or "hitl"
+retrieved_docs → retriever writes this. The K=6 chunks from Chroma
+conflicts      → conflict node writes this. List of contradictions found
+answer         → retriever/conflict node writes a draft answer here
+critique       → critic node writes its assessment statement here
+critique_score → critic score writes its assessment score here
+needs_hitl     → critic or router sets this True to escalate to human
+hitl_response  → populated externally when human reviewer responds
+messages       → full conversation history, managed by LangGraph
+
+### Agent nodes
+
+**Router node:**
+Uses GPT-4o-mini at temperature=0 to classify queries into three categories:
+`retriever` (factual), `conflict` (policy comparison), or `hitl` (ambiguous).
+Temperature=0 ensures deterministic routing — same query always takes the same path.
+Invalid LLM responses default to `hitl` as a safe fallback.
+
+**Retriever node:**
+Runs a similarity search against the Chroma vector store (K=6) and passes
+retrieved chunks to GPT-4o-mini for answer synthesis. Initial implementation
+returned raw chunks as the answer and scored 0.4 on critic evaluation.
+Adding an LLM synthesis step that generates a cited answer from the chunks
+brought critic scores to 1.0. The critic loop caught this gap before
+manual testing would have.
+
+**Critic node:**
+Evaluates answer faithfulness, completeness, and citation quality on a 0.0-1.0
+scale using GPT-4o-mini at temperature=0. Answers scoring below 0.7 trigger
+a retrieval retry. After 2 failed retries the system escalates to human review
+rather than returning a low-quality answer. Parse failures default to 0.0 to
+err on the side of caution.
+
+**LangGraph state machine:**
+Five-node graph with two conditional edges — one after the router (routing
+decision) and one after the critic (retry, escalate, or end). The graph
+handles retry loops and branching natively, eliminating the need for manual
+flow control code.
+
+**Conflict node:**
+Uses K=8 retrieval (vs K=6 for standard retrieval) to cast a wider net 
+across documents. Tested with cross-document query about telework policies —
+correctly identified contradictions between elder care flexibility provisions
+and emergency leave continuity requirements, with page-level citations from
+both source documents.
+
+## End-to-end test results
+
+| Query type | Route | Critic score | Result |
+|------------|-------|--------------|--------|
+| "What happens to my pay during a weather emergency?" | retriever | 1.0 | Cited answer, pages 2-4 |
+| "How do elder care and emergency leave differ on telework?" | conflict | 1.0 | Cross-document conflict analysis |
+| "I have a complicated situation with my leave" | hitl | — | Paused for human review |
+
+

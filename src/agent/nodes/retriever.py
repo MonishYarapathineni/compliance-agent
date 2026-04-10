@@ -7,9 +7,30 @@ the current user query.  Retrieved documents are stored in
 
 from __future__ import annotations
 
-# TODO: from src.agent.state import AgentState
-# TODO: from src.ingestion.vectorstore import VectorStoreManager
+from src.agent.state import AgentState
+from src.ingestion.vectorstore import VectorStoreManager
+from langchain_openai import ChatOpenAI
+from src.agent.utils import format_docs
+import os
 
+CHROMA_PATH = "../data/processed/chroma"
+retrieve = VectorStoreManager(CHROMA_PATH).as_retriever()
+
+
+ANSWER_PROMPT = """You are a compliance policy assistant.
+
+Using ONLY the provided policy excerpts, answer the user's question clearly and concisely.
+Always cite your sources using the format [filename, page X].
+Do not include any information not found in the excerpts.
+
+Question: {query}
+
+Policy excerpts:
+{source_chunks}
+
+Answer:"""
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
 
 def retrieve_documents(state: dict) -> dict:
     """Run a similarity search and populate ``retrieved_docs``.
@@ -20,7 +41,14 @@ def retrieve_documents(state: dict) -> dict:
     Returns:
         Partial state update with ``retrieved_docs`` list populated.
     """
-    # TODO: retriever = VectorStoreManager().as_retriever()
-    # TODO: docs = retriever.invoke(state["query"])
-    # TODO: return {"retrieved_docs": docs}
-    pass
+
+    docs = retrieve.invoke(state["query"])
+    print(f"Retriever node found {len(docs)} relevant documents.")
+    print("query:", state["query"])
+    source_chunks = format_docs(docs)
+    query = state["query"]
+    prompt = ANSWER_PROMPT.format(query=query, source_chunks=source_chunks)
+    answer = llm.invoke(prompt).content.strip()
+
+
+    return {"retrieved_docs": docs, "answer": answer}

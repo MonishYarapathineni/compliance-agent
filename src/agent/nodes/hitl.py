@@ -7,8 +7,8 @@ written into ``AgentState.hitl_response`` and the graph resumes.
 
 from __future__ import annotations
 
-# TODO: from langgraph.types import interrupt
-# TODO: from src.agent.state import AgentState
+from langgraph.types import interrupt
+from src.agent.state import AgentState
 
 
 def human_review(state: dict) -> dict:
@@ -24,7 +24,17 @@ def human_review(state: dict) -> dict:
     Returns:
         Partial state update with ``hitl_response`` populated after resume.
     """
-    # TODO: payload = build_review_payload(state)
-    # TODO: response = interrupt(payload)   # suspends execution here
-    # TODO: return {"hitl_response": response}
-    pass
+
+    human_response = interrupt({
+        "query": state["query"],
+        "answer": state.get("answer"),
+        "critique_score": state.get("critique_score"),
+        "retry_count": state.get("retry_count", 0),
+        "message": "Human review required. Please provide a verified answer."
+    })
+
+    return {
+        "hitl_response": human_response,
+        "answer": human_response,
+        "needs_hitl": False
+    }

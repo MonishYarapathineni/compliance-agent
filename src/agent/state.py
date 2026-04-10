@@ -36,9 +36,8 @@ class AgentState(TypedDict):
     conflicts: Optional[list[dict]]
     answer: Optional[str]
     critique: Optional[str]
+    critique_score: Optional[float]
     needs_hitl: bool
     hitl_response: Optional[str]
     messages: Annotated[list[BaseMessage], add_messages]
-
-    # TODO: convert to TypedDict with proper Annotated fields
-    pass
+    retry_count: int

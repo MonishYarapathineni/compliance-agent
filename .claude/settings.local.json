@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import json,sys; nb=json.load\\(sys.stdin\\); [print\\(json.dumps\\(c.get\\('outputs',''\\), indent=2\\)\\) for c in nb['cells'] if c.get\\('id'\\)=='8ac841d9']\")"
+    ]
+  }
+}
