@@ -13,7 +13,8 @@ from langchain_openai import ChatOpenAI
 from src.agent.utils import format_docs
 import os
 
-CHROMA_PATH = "../data/processed/chroma"
+CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR","../data/processed/chroma")
+print(f"Initializing retriever with Chroma path: {CHROMA_PATH}")
 retrieve = VectorStoreManager(CHROMA_PATH).as_retriever()
 
 

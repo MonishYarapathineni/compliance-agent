@@ -19,7 +19,7 @@ class PolicyChunker:
         chunk_overlap: int = 128,
         strategy: str = "recursive",
     ) -> None:
-        # TODO: validate strategy, instantiate the appropriate splitter
+       
         if strategy == "character":
             self.splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
         elif strategy == "recursive":

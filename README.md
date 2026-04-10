@@ -188,3 +188,43 @@ both source documents.
 | "I have a complicated situation with my leave" | hitl | — | Paused for human review |
 
 
+## Evaluation results (v1)
+
+| Metric | Score |
+|--------|-------|
+| Faithfulness | 0.84 |
+| Answer relevancy | 0.98 |
+| Context recall | 0.89 |
+
+Evaluated against 6 golden test cases covering factual queries across 
+3 OPM policy documents and 1 cross-document conflict query.
+Faithfulness gap (0.16) attributed to conflict analysis node drawing 
+implicit conclusions not explicitly stated in source chunks — a known 
+tradeoff in cross-document reasoning tasks.
+
+Another Run after adding MlFlow Tracking 
+![alt text](image-1.png)
+
+- Conflict analysis returned as prose in `answer` field rather than 
+  structured `ConflictSummary` objects. Future improvement for 
+  frontend rendering.
+
+## API
+
+### POST /api/v1/query
+```json
+// request
+{"query": "What happens to my pay during a weather emergency?"}
+
+// response
+{"answer":"During a weather emergency, if your official Federal worksite is closed, your agency may provide weather and safety leave at its discretion. This leave does not have specific time limitations and should align with the nature of the emergency. If you are on weather and safety leave, you will continue to receive your regular pay based on the rates and allowances you were entitled to before the emergency [emergencybenefits.pdf, pages 2-4]. \n\nIf you are required to evacuate, your agency may authorize evacuation payments, which will cover the period of evacuation and be based on your regular pay [emergencybenefits.pdf, pages 3-4].",
+"citations":[{"source":"emergencybenefits.pdf","page":2},{"source":"emergencybenefits.pdf","page":3},{"source":"emergencybenefits.pdf","page":4}],
+"needs_hitl":false,
+"critique_score":1.0,
+"thread_id":null}
+```
+
+### GET /api/v1/health
+```json
+{"status": "ok"}
+```

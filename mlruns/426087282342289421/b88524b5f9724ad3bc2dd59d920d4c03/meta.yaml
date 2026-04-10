@@ -1,0 +1,14 @@
+artifact_uri: /Users/monish/Desktop/Monish-Personal/compliance-agent/notebooks/../mlruns/426087282342289421/b88524b5f9724ad3bc2dd59d920d4c03/artifacts
+end_time: 1775845557841
+entry_point_name: ''
+experiment_id: '426087282342289421'
+lifecycle_stage: active
+run_id: b88524b5f9724ad3bc2dd59d920d4c03
+run_name: ragas_eval_v1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1775845557811
+status: 3
+tags: []
+user_id: monish

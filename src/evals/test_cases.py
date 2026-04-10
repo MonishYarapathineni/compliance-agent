@@ -7,7 +7,7 @@ snippet, and the policy sections that should be cited.
 
 from __future__ import annotations
 
-# TODO: from datasets import Dataset
+from datasets import Dataset
 
 # ---------------------------------------------------------------------------
 # Golden evaluation dataset
@@ -65,5 +65,11 @@ GOLDEN_CASES: list[dict] = [
     },
 ]
 
-# TODO: EVAL_DATASET = Dataset.from_list(GOLDEN_CASES)
-EVAL_DATASET = None
+# Dataset for RAGAS eval — only cases with ground truth
+EVAL_DATASET = Dataset.from_list([
+    case for case in GOLDEN_CASES 
+    if case["ground_truth"] is not None
+])
+
+# Router test cases — all cases including HITL
+ROUTER_TEST_CASES = GOLDEN_CASES
