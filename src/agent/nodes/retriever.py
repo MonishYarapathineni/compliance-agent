@@ -10,7 +10,7 @@ from src.ingestion.vectorstore import VectorStoreManager
 from langchain_openai import ChatOpenAI
 from src.agent.utils import format_docs
 import os
-import os
+
 print(f"Retriever PINECONE_API_KEY: {bool(os.getenv('PINECONE_API_KEY'))}")
 retrieve = VectorStoreManager().as_retriever()
 CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")

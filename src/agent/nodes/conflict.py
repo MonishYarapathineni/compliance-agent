@@ -9,7 +9,6 @@ from __future__ import annotations
 from langchain_openai import ChatOpenAI
 from src.ingestion.vectorstore import VectorStoreManager
 from src.agent.utils import format_docs
-import os
 
 retrieve = VectorStoreManager().as_retriever(
     search_kwargs={

@@ -10,6 +10,7 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_openai import OpenAIEmbeddings
 from pinecone import Pinecone
 
+
 class VectorStoreManager:
     """Creates, populates, and exposes a Pinecone vector store."""
 
@@ -22,21 +23,14 @@ class VectorStoreManager:
     def build(self, chunks: list) -> None:
         """Embed chunks and upsert into Pinecone."""
         PineconeVectorStore.from_documents(
-            chunks,
-            self.embeddings,
-            index_name=self.index_name
+            chunks, self.embeddings, index_name=self.index_name
         )
         print(f"Upserted {len(chunks)} chunks to Pinecone index '{self.index_name}'")
 
     def load(self) -> PineconeVectorStore:
         """Connect to existing Pinecone index."""
-        return PineconeVectorStore(
-            index=self.index,
-            embedding=self.embeddings
-        )
+        return PineconeVectorStore(index=self.index, embedding=self.embeddings)
 
     def as_retriever(self, search_kwargs: dict | None = None):
         """Return a LangChain retriever for use inside the agent graph."""
-        return self.load().as_retriever(
-            search_kwargs=search_kwargs or {"k": 6}
-        )
+        return self.load().as_retriever(search_kwargs=search_kwargs or {"k": 6})

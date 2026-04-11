@@ -57,7 +57,7 @@ class PolicyChunker:
                 continue
             if chunk.metadata.get("page") == 0:
                 continue
-            if content.count('. . .') > 2 or content.count('......') > 1:
+            if content.count(". . .") > 2 or content.count("......") > 1:
                 continue
             chunk.metadata["chunk_index"] = i
             # ensure page is stored as int not float

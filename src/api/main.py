@@ -18,11 +18,12 @@ import os
 
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-import os
 print(f"PINECONE_API_KEY loaded: {bool(os.getenv('PINECONE_API_KEY'))}")
 print(f"OPENAI_API_KEY loaded: {bool(os.getenv('OPENAI_API_KEY'))}")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
