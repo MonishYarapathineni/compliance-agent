@@ -13,9 +13,11 @@ import os
 
 CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")
 retrieve = VectorStoreManager(CHROMA_PATH).as_retriever(
-    search_kwargs={"k": 8,
-                   "filter": None  # could filter by source document
-                   })
+    search_kwargs={
+        "k": 8,
+        "filter": None,  # could filter by source document
+    }
+)
 
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
@@ -48,7 +50,7 @@ def detect_conflicts(state: dict) -> dict:
         Partial state update with ``conflicts`` list and optionally
         ``needs_hitl`` flag set to ``True``.
     """
-    
+
     docs = retrieve.invoke(state["query"])
     print(f"Retriever node found {len(docs)} relevant documents.")
     print("query:", state["query"])

@@ -10,7 +10,13 @@ import uuid
 import re
 from fastapi import APIRouter
 from langgraph.checkpoint.memory import MemorySaver
-from src.api.schemas import QueryRequest, QueryResponse, HITLReviewRequest, Citation, IngestResponse
+from src.api.schemas import (
+    QueryRequest,
+    QueryResponse,
+    HITLReviewRequest,
+    Citation,
+    IngestResponse,
+)
 from src.agent.graph import build_graph
 
 
@@ -22,14 +28,14 @@ agent_app = build_graph(checkpointer=checkpointer)
 def _extract_citations(answer: str) -> list[Citation]:
     if not answer:
         return []
-    pattern = r'\[([^,\]]+),\s*pages?\s*([\d]+(?:-[\d]+)?)\]'
+    pattern = r"\[([^,\]]+),\s*pages?\s*([\d]+(?:-[\d]+)?)\]"
     matches = re.findall(pattern, answer)
     seen = set()
     citations = []
     for source, page_ref in matches:
         source = source.strip()
-        if '-' in page_ref:
-            start, end = page_ref.split('-')
+        if "-" in page_ref:
+            start, end = page_ref.split("-")
             for p in range(int(start), int(end) + 1):
                 key = (source, p)
                 if key not in seen:
@@ -41,6 +47,7 @@ def _extract_citations(answer: str) -> list[Citation]:
                 seen.add(key)
                 citations.append(Citation(source=source, page=int(page_ref)))
     return citations
+
 
 @router.get("/health")
 async def health_check() -> dict:
@@ -59,7 +66,7 @@ async def query(request: QueryRequest) -> QueryResponse:
     """
     thread_id = str(uuid.uuid4())
     config = {"configurable": {"thread_id": thread_id}}
-    
+
     initial_state = {
         "query": request.query,
         "retry_count": 0,
@@ -70,9 +77,9 @@ async def query(request: QueryRequest) -> QueryResponse:
         "critique": None,
         "critique_score": None,
         "hitl_response": None,
-        "messages": []
+        "messages": [],
     }
-    
+
     result = agent_app.invoke(initial_state, config=config)
 
     # when graph hits interrupt(), result may be incomplete
@@ -84,8 +91,9 @@ async def query(request: QueryRequest) -> QueryResponse:
         citations=_extract_citations(answer),
         needs_hitl=needs_hitl,
         critique_score=result.get("critique_score"),
-        thread_id=thread_id if needs_hitl else None
+        thread_id=thread_id if needs_hitl else None,
     )
+
 
 @router.post("/hitl/respond")
 async def hitl_respond(request: HITLReviewRequest) -> dict:
@@ -104,5 +112,5 @@ async def trigger_ingestion(background_tasks=None) -> dict:
     """Kick off a background document ingestion job."""
     return IngestResponse(
         status="not_implemented",
-        message="Ingestion triggered via CLI. API trigger coming soon."
+        message="Ingestion triggered via CLI. API trigger coming soon.",
     )

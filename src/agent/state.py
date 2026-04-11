@@ -16,6 +16,7 @@ from langchain_core.documents import Document
 from langgraph.graph.message import add_messages
 from langchain_core.messages import BaseMessage
 
+
 class AgentState(TypedDict):
     """Shared state object passed between LangGraph nodes.
 
@@ -30,6 +31,7 @@ class AgentState(TypedDict):
         hitl_response:   Human reviewer's response (populated externally).
         messages:        Full conversation message history (LangGraph managed).
     """
+
     query: str
     routed_to: Optional[str]
     retrieved_docs: Optional[list[Document]]

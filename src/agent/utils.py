@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+
 def format_docs(docs: list) -> str:
     """Format a list of Documents into a cited string for LLM prompts."""
     lines = []

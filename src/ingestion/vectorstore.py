@@ -62,4 +62,3 @@ class VectorStoreManager:
             VectorStoreRetriever
         """
         return self.load().as_retriever(search_kwargs=search_kwargs or {"k": 6})
-

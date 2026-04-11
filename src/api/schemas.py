@@ -12,9 +12,9 @@ from typing import Optional
 
 class QueryRequest(BaseModel):
     """Request body for POST /query."""
+
     query: str = Field(..., description="The user's compliance question")
     session_id: Optional[str] = Field(None, description="Optional session identifier")
-
 
 
 class Citation(BaseModel):
@@ -22,7 +22,6 @@ class Citation(BaseModel):
 
     source: str
     page: int
-
 
 
 class QueryResponse(BaseModel):
@@ -41,7 +40,7 @@ class HITLReviewRequest(BaseModel):
     thread_id: str
     response: str
 
+
 class IngestResponse(BaseModel):
-    
     status: str
     message: str

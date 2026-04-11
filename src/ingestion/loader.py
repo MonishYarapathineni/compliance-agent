@@ -8,7 +8,7 @@ LangChain ``Document`` objects ready for chunking.
 from __future__ import annotations
 
 from pathlib import Path
-from langchain_community.document_loaders import PyPDFLoader,TextLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 
 
 class PolicyDocumentLoader:
@@ -17,7 +17,11 @@ class PolicyDocumentLoader:
     def __init__(self, source_dir: str) -> None:
         # TODO: store source_dir, configure supported extensions
         self.source_dir = Path(source_dir)
-        self.supported = {".pdf": self._load_pdf, ".docx": self._load_docx, ".txt": self._load_text}
+        self.supported = {
+            ".pdf": self._load_pdf,
+            ".docx": self._load_docx,
+            ".txt": self._load_text,
+        }
 
     def load(self) -> list:
         """Discover and load all supported documents under ``source_dir``.
@@ -51,4 +55,3 @@ class PolicyDocumentLoader:
         # TODO: implement
         loader = TextLoader(str(path), encoding="utf-8")
         return loader.load()
-        

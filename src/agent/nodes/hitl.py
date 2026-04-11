@@ -24,16 +24,18 @@ def human_review(state: dict) -> dict:
         Partial state update with ``hitl_response`` populated after resume.
     """
 
-    human_response = interrupt({
-        "query": state["query"],
-        "answer": state.get("answer"),
-        "critique_score": state.get("critique_score"),
-        "retry_count": state.get("retry_count", 0),
-        "message": "Human review required. Please provide a verified answer."
-    })
+    human_response = interrupt(
+        {
+            "query": state["query"],
+            "answer": state.get("answer"),
+            "critique_score": state.get("critique_score"),
+            "retry_count": state.get("retry_count", 0),
+            "message": "Human review required. Please provide a verified answer.",
+        }
+    )
 
     return {
         "hitl_response": human_response,
         "answer": human_response,
-        "needs_hitl": False
+        "needs_hitl": False,
     }

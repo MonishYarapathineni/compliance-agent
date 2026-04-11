@@ -6,7 +6,10 @@ character splitting and semantic/sentence-boundary strategies.
 """
 
 from __future__ import annotations
-from langchain_text_splitters import RecursiveCharacterTextSplitter, CharacterTextSplitter
+from langchain_text_splitters import (
+    RecursiveCharacterTextSplitter,
+    CharacterTextSplitter,
+)
 
 
 class PolicyChunker:
@@ -18,16 +21,20 @@ class PolicyChunker:
         chunk_overlap: int = 128,
         strategy: str = "recursive",
     ) -> None:
-       
-        if strategy == "character":
-            self.splitter = CharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-        elif strategy == "recursive":
-            self.splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-        
-        else:
-            raise ValueError(f"Unknown strategy '{strategy}'. Choose 'recursive' or 'character'.")
 
-        
+        if strategy == "character":
+            self.splitter = CharacterTextSplitter(
+                chunk_size=chunk_size, chunk_overlap=chunk_overlap
+            )
+        elif strategy == "recursive":
+            self.splitter = RecursiveCharacterTextSplitter(
+                chunk_size=chunk_size, chunk_overlap=chunk_overlap
+            )
+
+        else:
+            raise ValueError(
+                f"Unknown strategy '{strategy}'. Choose 'recursive' or 'character'."
+            )
 
     def split(self, documents: list) -> list:
         """Split a list of Documents into smaller chunks.
@@ -38,10 +45,9 @@ class PolicyChunker:
         Returns:
             list[Document]: Chunked documents with updated metadata.
         """
-        
+
         chunks = self.splitter.split_documents(documents)
         return self._add_chunk_metadata(chunks)
-        
 
     def _add_chunk_metadata(self, chunks: list) -> list:
         filtered = []
@@ -51,7 +57,7 @@ class PolicyChunker:
                 continue
             if chunk.metadata.get("page") == 0:
                 continue
-            if content.count('. . .') > 2 or content.count('......') > 1:
+            if content.count(". . .") > 2 or content.count("......") > 1:
                 continue
             chunk.metadata["chunk_index"] = i
             filtered.append(chunk)

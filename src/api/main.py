@@ -4,17 +4,19 @@ Creates and configures the FastAPI ``app`` instance, registers routers,
 sets up lifespan events (e.g. loading the vector store on startup), and
 attaches middleware for CORS and request logging.
 """
+
 # ruff: noqa: E402
 from __future__ import annotations
 from dotenv import load_dotenv
-load_dotenv() 
+
+load_dotenv()
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.routes import router
 import os
 
-CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR","../data/processed/chroma")
+CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")
 
 
 @asynccontextmanager
@@ -37,7 +39,7 @@ def create_app() -> object:
         title="Compliance Policy Agent",
         description="LangGraph-powered compliance Q&A with citations",
         version="1.0.0",
-        lifespan=lifespan
+        lifespan=lifespan,
     )
     app.add_middleware(
         CORSMiddleware,

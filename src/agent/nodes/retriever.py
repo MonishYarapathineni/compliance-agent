@@ -11,7 +11,7 @@ from langchain_openai import ChatOpenAI
 from src.agent.utils import format_docs
 import os
 
-CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR","../data/processed/chroma")
+CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")
 print(f"Initializing retriever with Chroma path: {CHROMA_PATH}")
 retrieve = VectorStoreManager(CHROMA_PATH).as_retriever()
 
@@ -31,6 +31,7 @@ Answer:"""
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
 
+
 def retrieve_documents(state: dict) -> dict:
     """Run a similarity search and populate ``retrieved_docs``.
 
@@ -48,6 +49,5 @@ def retrieve_documents(state: dict) -> dict:
     query = state["query"]
     prompt = ANSWER_PROMPT.format(query=query, source_chunks=source_chunks)
     answer = llm.invoke(prompt).content.strip()
-
 
     return {"retrieved_docs": docs, "answer": answer}

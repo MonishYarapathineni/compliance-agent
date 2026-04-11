@@ -22,6 +22,7 @@ Respond with ONLY the category name, nothing else.
 
 Question: {query}"""
 
+
 def route_query(state: dict) -> dict:
     """Inspect the user query and set ``routed_to`` in state.
 
@@ -39,6 +40,8 @@ def route_query(state: dict) -> dict:
 
     valid = {"retriever", "conflict", "hitl"}
     if decision not in valid:
-        print(f"Warning: Router node got invalid response '{response}', defaulting to 'hitl'")
+        print(
+            f"Warning: Router node got invalid response '{response}', defaulting to 'hitl'"
+        )
         decision = "hitl"
     return {"routed_to": decision}

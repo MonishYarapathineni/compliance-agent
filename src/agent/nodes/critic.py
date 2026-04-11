@@ -42,7 +42,6 @@ Respond with ONLY a decimal number between 0.00 and 1.00.
 Your score:"""
 
 
-
 def critique_answer(state: dict) -> dict:
     """Evaluate the current draft answer and return a critique.
 
@@ -60,17 +59,28 @@ def critique_answer(state: dict) -> dict:
     query = state["query"]
     answer = state["answer"]
     docs = format_docs(state["retrieved_docs"])
-    
-    response = llm.invoke(CRITIC_PROMPT.format(query=query, answer=answer, source_chunks=docs)).content.strip().lower()
-    
+
+    response = (
+        llm.invoke(CRITIC_PROMPT.format(query=query, answer=answer, source_chunks=docs))
+        .content.strip()
+        .lower()
+    )
+
     try:
         critique_score = float(response)
     except ValueError:
-        print(f"Warning: Critic node got non-numeric response '{critique_answer}', defaulting score to 0.0")
+        print(
+            f"Warning: Critic node got non-numeric response '{critique_answer}', defaulting score to 0.0"
+        )
         critique_score = 0.0
-    
+
     if critique_score < 0.0 or critique_score > 1.0:
-        print(f"Warning: Critique score {critique_score} out of bounds, defaulting to 0.0")
+        print(
+            f"Warning: Critique score {critique_score} out of bounds, defaulting to 0.0"
+        )
         critique_score = 0.0
-    
-    return {"critique_score": critique_score, "retry_count": state.get("retry_count", 0) + 1}
+
+    return {
+        "critique_score": critique_score,
+        "retry_count": state.get("retry_count", 0) + 1,
+    }

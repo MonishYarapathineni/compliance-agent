@@ -15,9 +15,11 @@ from src.agent.nodes.conflict import detect_conflicts
 from src.agent.nodes.critic import critique_answer
 from src.agent.nodes.hitl import human_review
 
+
 def route_decision(state: AgentState) -> str:
     # router node would write "retriever", "conflict", or "hitl" into state
     return state["routed_to"]
+
 
 def critic_decision(state: AgentState) -> str:
     if state["critique_score"] is not None and state["critique_score"] < 0.7:
@@ -27,6 +29,7 @@ def critic_decision(state: AgentState) -> str:
     if state["needs_hitl"]:
         return "hitl"
     return END
+
 
 def build_graph(checkpointer=None):
     """Construct and compile the LangGraph ``StateGraph``.
@@ -42,7 +45,6 @@ def build_graph(checkpointer=None):
     graph.add_node("critic", critique_answer)
     graph.add_node("hitl", human_review)
 
-
     # Set entry point
     graph.set_entry_point("router")
 
@@ -57,4 +59,4 @@ def build_graph(checkpointer=None):
 
 
 # Module-level compiled app — import and call ``app.invoke(state)``
-app = build_graph()  
+app = build_graph()
