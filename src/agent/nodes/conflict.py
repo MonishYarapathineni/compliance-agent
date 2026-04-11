@@ -7,7 +7,6 @@ different policy sections or versions.  Detected conflicts are stored in
 
 from __future__ import annotations
 from langchain_openai import ChatOpenAI
-from src.agent.state import AgentState
 from src.ingestion.vectorstore import VectorStoreManager
 from src.agent.utils import format_docs
 import os

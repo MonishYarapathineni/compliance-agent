@@ -51,3 +51,12 @@ coverage.xml
 .vscode/
 .idea/
 *.swp
+
+
+.env
+venv/
+mlruns/
+__pycache__/
+*.pyc
+data/processed/
+notebooks/.ipynb_checkpoints/

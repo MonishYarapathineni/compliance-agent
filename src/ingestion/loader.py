@@ -8,8 +8,7 @@ LangChain ``Document`` objects ready for chunking.
 from __future__ import annotations
 
 from pathlib import Path
-from langchain_community.document_loaders import PyPDFLoader, UnstructuredWordDocumentLoader, TextLoader
-from langchain_core.documents import Document
+from langchain_community.document_loaders import PyPDFLoader,TextLoader
 
 
 class PolicyDocumentLoader:

@@ -6,9 +6,8 @@ The routing decision is written back into ``AgentState.routed_to``.
 """
 
 from __future__ import annotations
-
 from langchain_openai import ChatOpenAI
-from src.agent.state import AgentState
+
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
 

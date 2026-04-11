@@ -6,8 +6,6 @@ and asserts correct status codes, response shapes, and error handling.
 
 from __future__ import annotations
 
-import pytest
-
 # TODO: from fastapi.testclient import TestClient
 # TODO: from src.api.main import create_app
 

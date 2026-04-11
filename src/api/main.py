@@ -4,7 +4,7 @@ Creates and configures the FastAPI ``app`` instance, registers routers,
 sets up lifespan events (e.g. loading the vector store on startup), and
 attaches middleware for CORS and request logging.
 """
-
+# ruff: noqa: E402
 from __future__ import annotations
 from dotenv import load_dotenv
 load_dotenv() 

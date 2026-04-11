@@ -8,7 +8,6 @@ written into ``AgentState.hitl_response`` and the graph resumes.
 from __future__ import annotations
 
 from langgraph.types import interrupt
-from src.agent.state import AgentState
 
 
 def human_review(state: dict) -> dict:

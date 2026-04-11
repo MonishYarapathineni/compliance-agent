@@ -6,9 +6,8 @@ character splitting and semantic/sentence-boundary strategies.
 """
 
 from __future__ import annotations
-
 from langchain_text_splitters import RecursiveCharacterTextSplitter, CharacterTextSplitter
-from langchain_core.documents import Document
+
 
 class PolicyChunker:
     """Wraps LangChain text splitters with project-specific defaults."""

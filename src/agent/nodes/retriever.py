@@ -6,8 +6,6 @@ the current user query.  Retrieved documents are stored in
 """
 
 from __future__ import annotations
-
-from src.agent.state import AgentState
 from src.ingestion.vectorstore import VectorStoreManager
 from langchain_openai import ChatOpenAI
 from src.agent.utils import format_docs
