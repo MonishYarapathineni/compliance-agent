@@ -228,3 +228,40 @@ Another Run after adding MlFlow Tracking
 ```json
 {"status": "ok"}
 ```
+## API endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/health` | Health check |
+| POST | `/api/v1/query` | Submit a compliance question |
+| POST | `/api/v1/hitl/respond` | Resume a human-reviewed query |
+
+## Running locally
+
+```bash
+# install dependencies
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# set up environment
+cp .env.example .env
+# add your OPENAI_API_KEY to .env
+
+# run the API
+uvicorn src.api.main:app --reload --port 8000
+```
+
+## Running with Docker
+
+```bash
+docker build -t compliance-agent:latest .
+docker run -p 8000:8000 --env-file .env -v $(pwd)/data:/app/data compliance-agent:latest
+```
+
+## CI/CD
+
+GitHub Actions runs on every push to `main`:
+1. Ruff lint and format check
+2. Pytest unit tests
+3. Docker build verification
