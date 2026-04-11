@@ -16,10 +16,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install linting dependencies
-        run: pip install ruff mypy
+        run: pip install ruff
 
       - name: Ruff lint
         run: ruff check src/ tests/
@@ -27,15 +27,13 @@ jobs:
       - name: Ruff format check
         run: ruff format --check src/ tests/
 
-      # TODO: - name: Mypy type check
-      #         run: mypy src/
-
   test:
     name: Test
     runs-on: ubuntu-latest
     needs: lint
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      CHROMA_PERSIST_DIR: data/processed/chroma
 
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +41,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -51,14 +49,12 @@ jobs:
       - name: Run pytest
         run: pytest tests/ -v --tb=short
 
-      # TODO: - name: Upload coverage report
-      #         uses: codecov/codecov-action@v4
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
 
-  # TODO: eval:
-  #   name: Eval (RAGAS)
-  #   runs-on: ubuntu-latest
-  #   needs: test
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: pip install -r requirements.txt
-  #     - run: python -m src.evals.ragas_eval
+      - name: Build Docker image
+        run: docker build -t compliance-agent:latest .
