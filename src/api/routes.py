@@ -28,24 +28,26 @@ agent_app = build_graph(checkpointer=checkpointer)
 def _extract_citations(answer: str) -> list[Citation]:
     if not answer:
         return []
-    pattern = r"\[([^,\]]+),\s*pages?\s*([\d]+(?:-[\d]+)?)\]"
+    pattern = r'\[([^,\]]+),\s*pages?\s*([\d]+(?:\.0)?(?:-[\d]+(?:\.0)?)?)\]'
     matches = re.findall(pattern, answer)
     seen = set()
     citations = []
     for source, page_ref in matches:
         source = source.strip()
-        if "-" in page_ref:
-            start, end = page_ref.split("-")
-            for p in range(int(start), int(end) + 1):
+        if '-' in page_ref:
+            parts = page_ref.split('-')
+            start = int(float(parts[0]))
+            end = int(float(parts[1]))
+            for p in range(start, end + 1):
                 key = (source, p)
                 if key not in seen:
                     seen.add(key)
                     citations.append(Citation(source=source, page=p))
         else:
-            key = (source, int(page_ref))
+            key = (source, int(float(page_ref)))
             if key not in seen:
                 seen.add(key)
-                citations.append(Citation(source=source, page=int(page_ref)))
+                citations.append(Citation(source=source, page=int(float(page_ref))))
     return citations
 
 

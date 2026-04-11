@@ -11,8 +11,7 @@ from src.ingestion.vectorstore import VectorStoreManager
 from src.agent.utils import format_docs
 import os
 
-CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")
-retrieve = VectorStoreManager(CHROMA_PATH).as_retriever(
+retrieve = VectorStoreManager().as_retriever(
     search_kwargs={
         "k": 8,
         "filter": None,  # could filter by source document

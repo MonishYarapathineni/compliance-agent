@@ -10,10 +10,12 @@ from src.ingestion.vectorstore import VectorStoreManager
 from langchain_openai import ChatOpenAI
 from src.agent.utils import format_docs
 import os
-
+import os
+print(f"Retriever PINECONE_API_KEY: {bool(os.getenv('PINECONE_API_KEY'))}")
+retrieve = VectorStoreManager().as_retriever()
 CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")
-print(f"Initializing retriever with Chroma path: {CHROMA_PATH}")
-retrieve = VectorStoreManager(CHROMA_PATH).as_retriever()
+
+retrieve = VectorStoreManager().as_retriever()
 
 
 ANSWER_PROMPT = """You are a compliance policy assistant.
@@ -45,7 +47,9 @@ def retrieve_documents(state: dict) -> dict:
     docs = retrieve.invoke(state["query"])
     print(f"Retriever node found {len(docs)} relevant documents.")
     print("query:", state["query"])
+    print(f"First doc source: {docs[0].metadata if docs else 'NO DOCS'}")
     source_chunks = format_docs(docs)
+    print(f"Source chunks preview: {source_chunks[:200]}")
     query = state["query"]
     prompt = ANSWER_PROMPT.format(query=query, source_chunks=source_chunks)
     answer = llm.invoke(prompt).content.strip()

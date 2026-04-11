@@ -2,8 +2,8 @@ venv/
 .env
 __pycache__/
 *.pyc
-*.pyo
 notebooks/
 mlruns/
 .git/
 *.ipynb
+data/processed/

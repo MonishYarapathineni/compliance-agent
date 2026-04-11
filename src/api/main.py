@@ -16,13 +16,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.api.routes import router
 import os
 
-CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "../data/processed/chroma")
 
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+print(f"PINECONE_API_KEY loaded: {bool(os.getenv('PINECONE_API_KEY'))}")
+print(f"OPENAI_API_KEY loaded: {bool(os.getenv('OPENAI_API_KEY'))}")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Starting compliance agent...")
-    print(f"Initializing retriever with Chroma path: {CHROMA_PATH}")
     # startup: warm up vector store
     yield
     # shutdown: cleanup

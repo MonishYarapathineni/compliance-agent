@@ -265,3 +265,5 @@ GitHub Actions runs on every push to `main`:
 1. Ruff lint and format check
 2. Pytest unit tests
 3. Docker build verification
+
+![alt text](image-2.png)
