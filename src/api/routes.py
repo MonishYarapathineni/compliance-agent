@@ -8,6 +8,7 @@ checks.
 from __future__ import annotations
 import uuid
 import re
+from fastapi import APIRouter
 from langgraph.checkpoint.memory import MemorySaver
 from src.api.schemas import QueryRequest, QueryResponse, HITLReviewRequest, Citation, IngestResponse
 from src.agent.graph import build_graph
