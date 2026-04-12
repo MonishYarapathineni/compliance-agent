@@ -38,6 +38,7 @@ cross-document reasoning tasks.
 
 ## Architecture Decisions
 
+```
 User query
     │
     ▼
@@ -53,6 +54,7 @@ User query
                          │
                     score ≥ 0.7 ──► END
 
+```
 
 Five-node LangGraph `StateGraph` with two conditional edges.
 
