@@ -274,3 +274,11 @@ Base URL: `https://compliance-agent.fly.dev`
 
 Health check: `https://compliance-agent.fly.dev/api/v1/health`
 API docs: `https://compliance-agent.fly.dev/docs`
+
+## Live Demo
+
+**Frontend:** https://compliance-agent-frontend.vercel.app  
+**API:** https://compliance-agent.fly.dev  
+**API Docs:** https://compliance-agent.fly.dev/docs
+
+![alt text](<Screenshot 2026-04-12 at 4.41.16 PM.png>)
