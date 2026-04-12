@@ -267,3 +267,10 @@ GitHub Actions runs on every push to `main`:
 3. Docker build verification
 
 ![alt text](image-2.png)
+
+## Live API
+
+Base URL: `https://compliance-agent.fly.dev`
+
+Health check: `https://compliance-agent.fly.dev/api/v1/health`
+API docs: `https://compliance-agent.fly.dev/docs`
